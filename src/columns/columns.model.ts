@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { User } from "src/users/users.model";
 
 interface ColumnsCreationAttr {
     userId: number,
@@ -12,11 +13,15 @@ export class Columns extends Model<Columns, ColumnsCreationAttr>{
     @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})
     id: number;
 
-    @ApiProperty({example: '1'})
+    @ForeignKey(() => User)
+    //@ApiProperty({example: '1'})
     @Column({type: DataType.INTEGER, allowNull: false})
-    userId: number;
+    userId: User;
 
     @ApiProperty({example: 'Column title'})
     @Column({type: DataType.STRING, allowNull: false})
     title: string;
+
+    @BelongsTo(() => User)
+    author: User;
 }
