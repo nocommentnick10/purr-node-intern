@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Columns } from './columns.model';
 import { CreateColumnDto } from './dto/create-column.dto';
+import { UpdateColumnDto } from './dto/update-column.dto';
+import { DeleteColumnDto } from './dto/delete-column.dto';
 
 @Injectable()
 export class ColumnsService {
@@ -20,5 +22,17 @@ export class ColumnsService {
             id
         }})
         return column;
+    }
+
+    async updateColumn(dto: UpdateColumnDto){
+        const column = await this.getColumnById(dto.id);
+        return column.update({
+            title: dto.title
+        });
+    }
+
+    async deleteColumn(dto: DeleteColumnDto){
+        const column = await this.getColumnById(dto.id);
+        return column.destroy();
     }
 }

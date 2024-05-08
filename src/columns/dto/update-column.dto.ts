@@ -1,10 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class GetColumnDto {
+export class UpdateColumnDto {
     @ApiProperty({example: '1'})
     readonly id: number;
     @ApiProperty({example: '1'})
     readonly userId: number;
-    @ApiProperty({example: 'Column title'})
+    @ApiProperty({example: 'Updated column title'})
     title: string;
 }
