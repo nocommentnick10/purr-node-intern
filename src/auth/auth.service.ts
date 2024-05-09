@@ -13,12 +13,12 @@ export class AuthService {
 
     }
 
-    async login(userDto: CreateUserDto){
+    async login(userDto: CreateUserDto): Promise<{ token: string }>{
         const user = await this.validateUser(userDto);
         return this.generateToken(user);
     }
 
-    async register(userDto: CreateUserDto){
+    async register(userDto: CreateUserDto): Promise<{ token: string }>{
         const candidate = await this.userService.getUsersByEmail(userDto.email);
 
         if (candidate){
@@ -32,7 +32,7 @@ export class AuthService {
         return this.generateToken(user);
     }
 
-    private async generateToken(user: User){
+    private async generateToken(user: User): Promise<{ token: string }>{
         const payload = {
             id: user.id,
             email: user.email
@@ -43,7 +43,7 @@ export class AuthService {
         }
     }
 
-    private async validateUser(userDto: CreateUserDto){
+    private async validateUser(userDto: CreateUserDto): Promise<User>{
         const user = await this.userService.getUsersByEmail(userDto.email);
 
         const passwordEquals = await bcrypt.compare(userDto.password, user.password);
