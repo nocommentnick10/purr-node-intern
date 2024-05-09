@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { User } from './users/users.model';
 import { ColumnsModule } from './columns/columns.module';
 import { Columns } from './columns/columns.model';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   controllers: [],
@@ -25,6 +26,7 @@ import { Columns } from './columns/columns.model';
     }),
     UsersModule,
     ColumnsModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
