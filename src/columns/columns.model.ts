@@ -16,7 +16,7 @@ export class Columns extends Model<Columns, ColumnsCreationAttr>{
     @ForeignKey(() => User)
     //@ApiProperty({example: '1'})
     @Column({type: DataType.INTEGER, allowNull: false})
-    userId: User;
+    userId: number;
 
     @ApiProperty({example: 'Column title'})
     @Column({type: DataType.STRING, allowNull: false})

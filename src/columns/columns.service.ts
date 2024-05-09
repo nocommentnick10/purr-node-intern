@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Columns } from './columns.model';
 import { CreateColumnDto } from './dto/create-column.dto';
@@ -12,7 +12,7 @@ export class ColumnsService {
 
     }
 
-    async createColumn(dto: CreateColumnDto){
+    async createColumn(dto: CreateColumnDto): Promise<Columns>{
         const column = await this.columnsRepository.create(dto)
         return column;
     }
@@ -24,15 +24,25 @@ export class ColumnsService {
         return column;
     }
 
-    async updateColumn(dto: UpdateColumnDto){
+    async updateColumn(dto: UpdateColumnDto): Promise<Columns>{
         const column = await this.getColumnById(dto.id);
-        return column.update({
-            title: dto.title
-        });
+        
+        if (column.userId === +dto.userId){
+            return column.update({
+                title: dto.title
+            });
+        } else {
+            throw new ForbiddenException({ message: 'Not allowed to manipulate this column' });
+        }
     }
 
-    async deleteColumn(dto: DeleteColumnDto){
+    async deleteColumn(dto: DeleteColumnDto): Promise<void>{
         const column = await this.getColumnById(dto.id);
-        return column.destroy();
+
+        if (column.userId === +dto.userId){
+            return column.destroy();
+        } else {
+            throw new ForbiddenException({ message: 'Not allowed to manipulate this column' });
+        }
     }
 }
