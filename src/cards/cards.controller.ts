@@ -6,7 +6,9 @@ import { CreateCardDto } from './dto/create-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
 import { DeleteCardDto } from './dto/delete-card.dto';
 import { CardsGuard } from './guards/cards.guard';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('cards')
 @Controller('cards')
 export class CardsController {
 
@@ -14,18 +16,24 @@ export class CardsController {
 
     }
 
+    @ApiOperation({summary: 'Create card'})
+    @ApiResponse({status: 200, type: Cards})
     @UseGuards(JWTAuthGuard)
     @Post()
     create(@Body() cardDto: CreateCardDto): Promise<Cards>{
         return this.cardsService.createCard(cardDto);
     }
 
+    @ApiOperation({summary: 'Get card by id'})
+    @ApiResponse({status: 200, type: Cards})
     @UseGuards(JWTAuthGuard)
     @Get(':id')
     getCardById(@Param('id', ParseIntPipe) id: number): Promise<Cards>{
         return this.cardsService.getCardById(id);
     }
 
+    @ApiOperation({summary: 'Update card'})
+    @ApiResponse({status: 200, type: Cards})
     @UseGuards(JWTAuthGuard)
     @UseGuards(CardsGuard)
     @Put()
@@ -33,6 +41,8 @@ export class CardsController {
         return this.cardsService.updateCard(cardDto);
     }
 
+    @ApiOperation({summary: 'Delete card'})
+    @ApiResponse({status: 200, type: null})
     @UseGuards(JWTAuthGuard)
     @UseGuards(CardsGuard)
     @Delete()
