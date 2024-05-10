@@ -2,7 +2,6 @@ import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@
 import { Observable } from "rxjs";
 import { ColumnsService } from "../columns.service";
 import { JwtService } from "@nestjs/jwt";
-import { INTEGER } from "sequelize";
 
 @Injectable()
 export class ColumnsGuard implements CanActivate{

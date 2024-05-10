@@ -1,9 +1,10 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Columns } from './columns.model';
 import { CreateColumnDto } from './dto/create-column.dto';
 import { UpdateColumnDto } from './dto/update-column.dto';
 import { DeleteColumnDto } from './dto/delete-column.dto';
+import { Cards } from 'src/cards/cards.model';
 
 @Injectable()
 export class ColumnsService {
@@ -44,5 +45,15 @@ export class ColumnsService {
         } else {
             throw new ForbiddenException({ message: 'Not allowed to manipulate this column' });
         }
+    }
+
+    async isColumnOwner(card: Promise<Cards>, candidateId: number): Promise<boolean>{
+        const column = await this.getColumnById((await card).columnId);
+
+        if (!column){
+            throw new NotFoundException({ message: 'A column with such id cannot be found' });
+        }
+
+        return column.userId === candidateId;
     }
 }
