@@ -1,9 +1,10 @@
-import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs';
 import { User } from 'src/users/users.model';
+import { LoginUserDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +14,7 @@ export class AuthService {
 
     }
 
-    async login(userDto: CreateUserDto): Promise<{ token: string }>{
+    async login(userDto: LoginUserDto): Promise<{ token: string }>{
         const user = await this.validateUser(userDto);
         return this.generateToken(user);
     }
@@ -45,6 +46,10 @@ export class AuthService {
 
     private async validateUser(userDto: CreateUserDto): Promise<User>{
         const user = await this.userService.getUsersByEmail(userDto.email);
+
+        if (!user) {
+            throw new NotFoundException({ message: 'This email is not registered' });
+        }
 
         const passwordEquals = await bcrypt.compare(userDto.password, user.password);
 

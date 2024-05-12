@@ -26,7 +26,7 @@ export class CommentsGuard implements CanActivate{
             }
         } catch(e){
             console.log(e);
-            throw new ForbiddenException({ message: 'Not allowed to manipulate this column' });
+            throw new ForbiddenException({ message: 'Not allowed to manipulate this comment' });
         }
     }
 }

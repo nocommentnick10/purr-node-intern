@@ -27,6 +27,7 @@ export class ColumnsController {
     @ApiOperation({summary: 'Get user columns'})
     @ApiResponse({status: 200, type: Columns})
     @UseGuards(JWTAuthGuard)
+    @UseGuards(ColumnsGuard)
     @Get()
     getUserColumns(@Param('id', ParseIntPipe) id: number): Promise<Columns[]>{
         return this.columnsService.getUserColumns(id);

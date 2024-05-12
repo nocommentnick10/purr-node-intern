@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
+import { Cards } from "src/cards/cards.model";
 import { Columns } from "src/columns/columns.model";
 import { Comments } from "src/comments/comments.model";
 

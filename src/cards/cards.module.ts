@@ -6,7 +6,6 @@ import { Columns } from 'src/columns/columns.model';
 import { Cards } from './cards.model';
 import { AuthModule } from 'src/auth/auth.module';
 import { User } from 'src/users/users.model';
-import { ColumnsService } from 'src/columns/columns.service';
 import { ColumnsModule } from 'src/columns/columns.module';
 import { Comments } from 'src/comments/comments.model';
 import { CommentsModule } from 'src/comments/comments.module';
@@ -18,6 +17,7 @@ import { CommentsModule } from 'src/comments/comments.module';
     SequelizeModule.forFeature([User, Columns, Cards, Comments]),
     forwardRef(() => AuthModule),
     ColumnsModule,
+    CardsModule,
     CommentsModule,
   ],
   exports: [

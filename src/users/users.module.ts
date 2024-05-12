@@ -6,6 +6,7 @@ import { User } from './users.model';
 import { Columns } from 'src/columns/columns.model';
 import { AuthModule } from 'src/auth/auth.module';
 import { Comments } from 'src/comments/comments.model';
+import { Cards } from 'src/cards/cards.model';
 
 @Module({
   controllers: [UsersController],

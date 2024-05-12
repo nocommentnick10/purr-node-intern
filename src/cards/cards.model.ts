@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
 import { Columns } from "src/columns/columns.model";
 import { Comments } from "src/comments/comments.model";
+import { User } from "src/users/users.model";
 
 interface CardCreationAttrs {
     columnId: number,
@@ -26,5 +27,5 @@ export class Cards extends Model<Cards, CardCreationAttrs>{
     toColumn: Columns;
 
     @HasMany(() => Comments)
-    columns: [Comments];
+    comments: [Comments];
 }
