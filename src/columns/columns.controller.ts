@@ -8,9 +8,10 @@ import { DeleteColumnDto } from './dto/delete-column.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ColumnsGuard } from './guards/columns.guard';
 import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { ParamsColDto } from './dto/params.dto';
 
 @ApiTags('columns')
-@Controller('columns')
+@Controller('/users/:id/columns')
 export class ColumnsController {
 
     constructor(private columnsService: ColumnsService){
@@ -25,29 +26,29 @@ export class ColumnsController {
         return this.columnsService.createColumn(columnDto);
     }
 
-    @ApiOperation({summary: 'Get column by id'})
+    @ApiOperation({summary: 'Get user columns'})
     @ApiResponse({status: 200, type: Columns})
     @UseGuards(JWTAuthGuard)
-    @Get(':id')
-    getColumnById(@Param('id', ParseIntPipe) id: number): Promise<Columns>{
-        return this.columnsService.getColumnById(id);
+    @Get()
+    getUserColumns(@Param('id', ParseIntPipe) id: number): Promise<Columns[]>{
+        return this.columnsService.getUserColumns(id);
     }
 
     @ApiOperation({summary: 'Update column'})
     @ApiResponse({status: 200, type: Columns})
     @UseGuards(JWTAuthGuard)
     @UseGuards(ColumnsGuard)
-    @Put()
-    update(@Body() columnDto: UpdateColumnDto): Promise<Columns>{
-        return this.columnsService.updateColumn(columnDto);
+    @Put(':colId')
+    update(@Param() params: ParamsColDto, @Body() columnDto: UpdateColumnDto): Promise<Columns>{
+        return this.columnsService.updateColumn(columnDto, params);
     }
 
     @ApiOperation({summary: 'Delete column'})
     @ApiResponse({status: 200, type: null})
     @UseGuards(JWTAuthGuard)
     @UseGuards(ColumnsGuard)
-    @Delete()
-    deleteColumn(@Body() columnDto: DeleteColumnDto): Promise<void>{
-        return this.columnsService.deleteColumn(columnDto);
+    @Delete(':colId')
+    deleteColumn(@Param('colId', ParseIntPipe) colId: number): Promise<void>{
+        return this.columnsService.deleteColumn(colId);
     }
 }

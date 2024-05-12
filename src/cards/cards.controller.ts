@@ -5,14 +5,18 @@ import { Cards } from './cards.model';
 import { CreateCardDto } from './dto/create-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
 import { DeleteCardDto } from './dto/delete-card.dto';
-import { CardsGuard } from './guards/cards.guard';
+import { CardsGuard } from './guards/put-delete-cards.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ColumnsService } from 'src/columns/columns.service';
+import { ParamsCardDto } from './dto/params.dto';
+import { GetCardsGuard } from './guards/get-cards.guard';
 
 @ApiTags('cards')
-@Controller('cards')
+@Controller('/users/:id/cards')
 export class CardsController {
 
-    constructor(private cardsService: CardsService){
+    constructor(private cardsService: CardsService,
+        private columnsService: ColumnsService){
 
     }
 
@@ -24,29 +28,32 @@ export class CardsController {
         return this.cardsService.createCard(cardDto);
     }
 
-    @ApiOperation({summary: 'Get card by id'})
+    @ApiOperation({summary: 'Get user cards'})
     @ApiResponse({status: 200, type: Cards})
     @UseGuards(JWTAuthGuard)
-    @Get(':id')
-    getCardById(@Param('id', ParseIntPipe) id: number): Promise<Cards>{
-        return this.cardsService.getCardById(id);
+    @UseGuards(GetCardsGuard)
+    @Get()
+    getUserCards(@Param('id', ParseIntPipe) id: number): Promise<Cards[]>{
+        const userColumns = this.columnsService.getUserColumns(id);
+
+        return this.cardsService.getUserCards(userColumns);
     }
 
     @ApiOperation({summary: 'Update card'})
     @ApiResponse({status: 200, type: Cards})
     @UseGuards(JWTAuthGuard)
     @UseGuards(CardsGuard)
-    @Put()
-    update(@Body() cardDto: UpdateCardDto): Promise<Cards>{
-        return this.cardsService.updateCard(cardDto);
+    @Put(':cardId')
+    update(@Param() params: ParamsCardDto, @Body() cardDto: UpdateCardDto): Promise<Cards>{
+        return this.cardsService.updateCard(cardDto, params);
     }
 
     @ApiOperation({summary: 'Delete card'})
     @ApiResponse({status: 200, type: null})
     @UseGuards(JWTAuthGuard)
     @UseGuards(CardsGuard)
-    @Delete()
-    deleteColumn(@Body() cardDto: DeleteCardDto): Promise<void>{
-        return this.cardsService.deleteCard(cardDto);
+    @Delete(':cardId')
+    deleteColumn(@Param('cardId', ParseIntPipe) cardId: number): Promise<void>{
+        return this.cardsService.deleteCard(cardId);
     }
 }

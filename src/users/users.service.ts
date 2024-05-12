@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './users.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -22,6 +22,16 @@ export class UsersService {
 
     async getUsersByEmail(email: string){
         const user = await this.userRepository.findOne({ where: {email}, include: {all: true}});
+        return user;
+    }
+
+    async getUserById(id: number): Promise<User>{
+        const user = await this.userRepository.findOne({ where: {id}, include: {all: true}});
+
+        if (!user){
+            throw new NotFoundException({ message: 'User with this id does not exist' });
+        }
+        
         return user;
     }
 }

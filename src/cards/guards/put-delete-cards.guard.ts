@@ -13,17 +13,23 @@ export class CardsGuard implements CanActivate{
 
     }
 
-    canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+    async canActivate(context: ExecutionContext): Promise<boolean> {
         const req = context.switchToHttp().getRequest();
 
         try{
-            const card = this.cardsService.getCardById(req.body.id);
+            const userId: number = +req.params.id;
 
             const token: string = req.headers.authorization.split(' ')[1];
 
-            const candidateId: number = this.jwtService.verify(token).id;
+            const candidateId: number = await this.jwtService.verify(token).id;
 
-            return this.columnsService.isColumnOwner(card, candidateId)
+            if (candidateId !== userId){
+                throw new Error;
+            }
+
+            const colId = await this.cardsService.getColumnIdByCard(req.params.cardId);
+
+            return this.columnsService.isOwner(colId, candidateId);
         } catch(e){
             throw new ForbiddenException({ message: 'Not allowed to manipulate this card'});
         }

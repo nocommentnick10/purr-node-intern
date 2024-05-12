@@ -1,13 +1,11 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
-import { Observable } from "rxjs";
-import { ColumnsService } from "../columns.service";
 import { JwtService } from "@nestjs/jwt";
+import { Observable } from "rxjs";
 
 @Injectable()
-export class ColumnsGuard implements CanActivate{
+export class GetCardsGuard implements CanActivate{
 
-    constructor(private columnsService: ColumnsService,
-        private jwtService: JwtService){
+    constructor(private jwtService: JwtService){
 
     }
 
@@ -21,13 +19,14 @@ export class ColumnsGuard implements CanActivate{
 
             const candidateId: number = this.jwtService.verify(token).id;
 
-            if (candidateId === userId){
-                return true;
-            } else {
-                throw new ForbiddenException();
+            if (candidateId !== userId){
+                throw new Error;
             }
+
+            return true;
         } catch(e){
-            throw new ForbiddenException({ message: 'Not allowed to manipulate this column' });
+            console.log(e);
+            throw new ForbiddenException({ message: 'Not allowed to get this user cards'});
         }
     }
 }
