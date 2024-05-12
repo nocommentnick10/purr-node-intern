@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
 import { Columns } from "src/columns/columns.model";
+import { Comments } from "src/comments/comments.model";
 
 interface CardCreationAttrs {
     columnId: number,
@@ -23,4 +24,7 @@ export class Cards extends Model<Cards, CardCreationAttrs>{
 
     @BelongsTo(() => Columns)
     toColumn: Columns;
+
+    @HasMany(() => Comments)
+    columns: [Comments];
 }

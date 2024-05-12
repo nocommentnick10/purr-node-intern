@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
-export class ColumnsGuard implements CanActivate{
+export class CommentsGuard implements CanActivate{
 
     constructor(private jwtService: JwtService){
 
@@ -25,6 +25,7 @@ export class ColumnsGuard implements CanActivate{
                 throw new ForbiddenException();
             }
         } catch(e){
+            console.log(e);
             throw new ForbiddenException({ message: 'Not allowed to manipulate this column' });
         }
     }

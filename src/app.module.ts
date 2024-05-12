@@ -8,6 +8,8 @@ import { Columns } from './columns/columns.model';
 import { AuthModule } from './auth/auth.module';
 import { CardsModule } from './cards/cards.module';
 import { Cards } from './cards/cards.model';
+import { CommentsModule } from './comments/comments.module';
+import { Comments } from './comments/comments.model';
 
 @Module({
   controllers: [],
@@ -23,13 +25,14 @@ import { Cards } from './cards/cards.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Columns, Cards],
+      models: [User, Columns, Cards, Comments],
       autoLoadModels: true,
     }),
     UsersModule,
     ColumnsModule,
     AuthModule,
     CardsModule,
+    CommentsModule,
   ],
 })
 export class AppModule {}

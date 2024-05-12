@@ -8,14 +8,17 @@ import { AuthModule } from 'src/auth/auth.module';
 import { User } from 'src/users/users.model';
 import { ColumnsService } from 'src/columns/columns.service';
 import { ColumnsModule } from 'src/columns/columns.module';
+import { Comments } from 'src/comments/comments.model';
+import { CommentsModule } from 'src/comments/comments.module';
 
 @Module({
   providers: [CardsService],
   controllers: [CardsController],
   imports: [
-    SequelizeModule.forFeature([User, Columns, Cards]),
+    SequelizeModule.forFeature([User, Columns, Cards, Comments]),
     forwardRef(() => AuthModule),
-    ColumnsModule
+    ColumnsModule,
+    CommentsModule,
   ],
   exports: [
     CardsService
